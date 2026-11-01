@@ -61,9 +61,9 @@ Claude Code's own checks (as of Claude Code 2.1.316) cover usage and writing sty
 
 On 60 findings sampled from 24 runs (public harnesses and the author's own), a separate model checked each finding's central claim against the repository: 57 of 60 (95%) held. The details (exact counts, line numbers) were fully right in 40 of 60, so read the `change` cell before you approve.
 
-## Cost
+## Time and usage
 
-A run uses your Claude Code plan like any long session. Measured in API-equivalent dollars with Opus: $4 to $17 for 11 of the 14 measured harnesses, $28 to $32 for the three largest.
+The first finding appears in about 2 minutes, and the full report is ready in 5 to 10 minutes for a typical harness (11 to 15 minutes for the largest measured, 135 or more items). Seven audits run in parallel as Opus subagents, one per source (skills, rules, agents, hooks, docs and more); a large skill library is split into batches of 12. On a Pro or Max plan this counts toward your usage limits (or your API credits, if you use an API key).
 
 <details>
 <summary>The seven audits, project mode, scheduling, measurement conditions</summary>
