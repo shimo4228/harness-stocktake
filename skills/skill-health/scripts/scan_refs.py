@@ -124,7 +124,7 @@ _DELEGATION_NOTE = (
     "Structural 'missing artifacts' check only. Over-specialized scope and "
     "trigger↔body drift are judged by the skill's own procedure (LLM), not by "
     "this scanner; the risk dimension is delegated to the claude-security plugin "
-    "and the validation dimension to skill-comply / skill-creator. "
+    "and the validation dimension to skill-comply / skill-writer. "
     "Nothing here is reduced to a number."
 )
 

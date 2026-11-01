@@ -52,7 +52,7 @@ three; `skill-health` adds the missing structural one and federates the rest:
 | **Compatibility** (refs resolve) | **`skill-health`** ← here | the deterministic scan (Phase 2) |
 | **Utility** (frequency, value) | `skill-stocktake` (holistic Keep/Improve/Retire/Merge) | read its signal; flag over-specialized (LLM) |
 | **Risk** (security, side effects) | `/claude-security` plugin | delegate; prompt to run if stale |
-| **Validation** (tests/consistency) | `skill-comply` / `skill-creator`, when the setup has them | note which skills lack a validator |
+| **Validation** (tests/consistency) | `skill-comply` / `skill-writer`, when the setup has them | note which skills lack a validator |
 
 ## Phase 1 — Inventory
 
@@ -95,7 +95,7 @@ Present each dangling reference with: skill, ref type, the raw reference, the
 resolved path, and the line. Do not auto-fix — a dangling reference may mean the
 artifact was deleted (remove the reference) **or** renamed (repoint it) **or**,
 for a `../`-escaping link, that the skill was authored in a repo and vendored
-into the harness (a portability issue per the `skill-creator` skill's
+into the harness (a portability issue per the `skill-writer` skill's
 `references/portability.md`). The
 repair is a human judgment; surface the fact, let the user decide.
 
@@ -132,7 +132,7 @@ health view — **labelling each value's source**:
   This is an enumeration, not a verdict — folding is the author's call.
 
 - **Size** — enumerate SKILL.md bodies over the 500-line limit
-  (`wc -l <harness>/skills/*/SKILL.md | sort -rn`; limit per skill-creator §3, sourced
+  (`wc -l <harness>/skills/*/SKILL.md | sort -rn`; limit per skill-writer §3, sourced
   from Anthropic's official best practices as of 2026-08-29 — re-check on doc updates).
   Growth after creation is the case the creation-time gate cannot catch. The verdict on
   whether an oversized body is bloat or load-bearing belongs to skill-stocktake's
@@ -141,7 +141,7 @@ health view — **labelling each value's source**:
   if present; if none/stale, recommend running `/claude-security`. Do not
   re-scan for vulnerabilities here.
 - **Validation** — note (**missing validators** debt) which scanned skills have
-  no `skill-comply` spec and no record of passing `skill-creator`'s gates — the
+  no `skill-comply` spec and no record of passing `skill-writer`'s gates — the
   fresh-context draft verdict (its §4) and, for a skill with verifiable output, the
   native ablation screen `claude plugin eval <skill dir> --ablation with-without --runs 3`
   (its §5) — i.e. no way to verify their behaviour. Judge **[LLM]** trigger↔body

@@ -29,7 +29,7 @@ this skill exists as a third sibling next to skill-stocktake and rules-stocktake
 > Design note 2 — approved edits are applied by this skill itself, on the apply branch. Same reasoning as rules-stocktake: no
 > improvement engine exists for agent definitions, and the corpus is small enough to
 > read in one context — delegation would be overengineering. The handoff exception is Demote to skill
-> (creating a skill is skill-creator's job).
+> (creating a skill is skill-writer's job).
 
 **Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/agent-stocktake.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
@@ -224,7 +224,7 @@ never a quota.
 | Improve | Worth keeping, needs tightening — includes **inversion** of suppression instructions (rewrite direction, don't delete) |
 | Update | Referenced technology/tool/model is outdated (verified, with evidence) |
 | Merge into [X] | Substantial overlap with another agent; name the target |
-| Demote to skill | The value is the instructions, not the separate context/process — move to the skill layer via skill-creator |
+| Demote to skill | The value is the instructions, not the separate context/process — move to the skill layer via skill-writer |
 | Dissolve | Absorbed by the substrate. Retirement by *success* — delete before the stale body overrides newer defaults; record the why in an ADR |
 | Retire | Defect-based removal: low quality, stale, broken beyond repair |
 
@@ -249,8 +249,8 @@ contract's Phases 2–5 with its own items. Each item carries, by verdict:
 - **Improve / Update / Merge**: `change` = the concrete edit as a diff; inversion edits show old
   and new direction side by side. Application edits the agent file directly on the branch
   (Design note 2)
-- **Demote to skill**: `change` = the skill-creator intent packet and whether the agent file is
-  deleted or reduced. Application creates the skill through skill-creator's report path
+- **Demote to skill**: `change` = the skill-writer intent packet and whether the agent file is
+  deleted or reduced. Application creates the skill through skill-writer's report path
 - **Dissolve / Retire**: `reason` = the absorption evidence or defect and what covers the need
   instead; `impact` = skills and rules that name this agent (grep the harness) and the public
   repo copy. Application records a Dissolve's why via `adr-writer`
@@ -310,7 +310,7 @@ Created on the first run — do not pre-seed. Update inline with Read/Write, not
 - `generation-audit` — the cross-asset orchestrator; on a model-generation change it
   collects runtime-layer evidence (conflict / redundancy) and `/claude-api prompt-audit`
   findings, and hands the agents slice to this skill as Stage 2 evidence.
-- `skill-creator` (when installed) — handoff target for the skill-creation half of Demote.
+- `skill-writer` (when installed) — handoff target for the skill-creation half of Demote.
 - `adr-writer` (when installed) — records the why of a Dissolve.
 - `harness-boundary` — design-time lens (layer / portability / obsolescence) for proposed
   mechanisms; applied to an installed agent, its Delete / Move are Stage 2 evidence only.

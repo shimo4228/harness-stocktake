@@ -27,9 +27,9 @@ instruction dilution.
 
 > Design note 2: unlike skill-stocktake, this skill **does** apply approved Improve/Update/
 > Merge edits itself instead of handing off. There is no improvement-engine skill for rules
-> (skill-creator's counterpart doesn't exist), and rule files are short — delegation
+> (skill-writer's counterpart doesn't exist), and rule files are short — delegation
 > would be overengineering. The handoff exception is Demote (creating a new skill is
-> skill-creator's job).
+> skill-writer's job).
 
 **Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/rules-stocktake.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
@@ -179,8 +179,8 @@ shows the exact edit, not a summary. Each item carries, by verdict:
   directly on the branch (Design note 2). If the edit changes the rule's reason-to-exist or expiry
   conditions, the same diff refreshes its `rationale:` / `review-when:` comments
 - **Demote to skill**: `change` = the 1–3 line principle + ``skill: `name` `` pointer that stays,
-  and the skill-creator intent packet for what moves. Application creates the skill through
-  skill-creator's report path
+  and the skill-writer intent packet for what moves. Application creates the skill through
+  skill-writer's report path
 - **Dissolve / Retire**: `reason` = the absorption evidence or defect and what covers the need
   instead (Dissolve: the named harness feature; Retire: the replacement rule/skill); `impact` =
   other rules referencing it and the public repo copy. Application records a Dissolve's why via

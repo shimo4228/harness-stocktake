@@ -1,6 +1,6 @@
 ---
 name: skill-stocktake
-description: "Audit the installed skills and decide which to keep, improve, merge or retire. Use when taking stock of the skill library (skill の棚卸し). For writing or revising one skill, use skill-creator."
+description: "Audit the installed skills and decide which to keep, improve, merge or retire. Use when taking stock of the skill library (skill の棚卸し). For writing or revising one skill, use skill-writer."
 license: MIT
 metadata:
   author: shimo4228
@@ -13,9 +13,9 @@ origin: shimo4228
 
 Evaluate installed skills and assign each a verdict: `Keep / Improve / Update / Retire /
 Merge`, plus `Out of scope` for skills this harness does not own (Phase 0). This skill
-does NOT do the improving — once it has a verdict, it **hands off to skill-creator (the
+does NOT do the improving — once it has a verdict, it **hands off to skill-writer (the
 improvement engine)**. That boundary is the point: stocktake is the quality gate,
-skill-creator is the fixer.
+skill-writer is the fixer.
 
 > Design note. Per-item quality/freshness and set-level existence/overlap are
 > different properties. Deterministic checks are code-owned and unconditional;
@@ -180,7 +180,7 @@ The same framing goes to the Phase 3 agent.
 Each batch agent applies, per skill:
 
 **Stage 1 — binary screen.** Explicit Yes/No per item; surface only the No answers
-(these six questions are the canonical set — `skill-creator` §4 reuses them for its
+(these six questions are the canonical set — `skill-writer` §4 reuses them for its
 creation-time draft gate by reference, not by copy):
 
 - [ ] Actionability: concrete steps/commands/examples you can act on?
@@ -199,7 +199,7 @@ creation-time draft gate by reference, not by copy):
   Read the skill's `MAINTENANCE.md` when it exists: it holds the reasons and history the
   body leaves out, and a claim there can be as stale as one in the body.
 - [ ] Hygiene: is the body free of bloat — trivial prohibition lists, repeated emphasis,
-  and step-by-step recitals that could fold into a principle (the skill-creator §3 writing guidance)?
+  and step-by-step recitals that could fold into a principle (the skill-writer §3 writing guidance)?
   Do NOT fold greppable detection terms, self-enforcing prohibitions, or numeric
   thresholds — abstraction destroys their function, so uniform shortening is
   not the goal. Bodies grow after creation; this question is the
@@ -216,7 +216,7 @@ creation-time draft gate by reference, not by copy):
   synthesis.
 
 **Stocktake-only existence pass (every item, including Keep-bound skills).** This is
-separate from the canonical six-question quality screen above, which `skill-creator`
+separate from the canonical six-question quality screen above, which `skill-writer`
 reuses. Answer both questions explicitly:
 
 - [ ] Standalone value: if this file disappeared, would the library lose a user job that
@@ -233,7 +233,7 @@ or part of a documented layer.
 skill-specific atomic yes/no questions that try to **refute the draft verdict** before
 finalizing it. Answer each with one line of evidence (file read, path check, WebSearch).
 A refuted defect → fall back toward Keep. A confirmed defect → the No answers become
-the concrete improvement list handed to skill-creator (Improve/Update) or the removal
+the concrete improvement list handed to skill-writer (Improve/Update) or the removal
 rationale (Retire).
 
 Evaluation is **holistic judgment, not a numeric rubric** — binary answers are evidence
@@ -357,8 +357,8 @@ contract's Phases 2–5 with its own items. Each item carries, by verdict:
 - **Retire / Merge / Retire-and-absorb**: `reason` = the specific defect and what covers the
   same need instead; `change` = the deletion, or the residue to move and its target; `impact` =
   dependent skills, rule pointers, MEMORY references
-- **Improve / Update**: `change` = the skill-creator intent packet (target skill, sections to
-  change, the No-answer list). Application runs skill-creator's report path; stocktake does not
+- **Improve / Update**: `change` = the skill-writer intent packet (target skill, sections to
+  change, the No-answer list). Application runs skill-writer's report path; stocktake does not
   do the improvement work itself
 - **Keep / Out of scope**: `reason` only
 - **Many Retires for one reason** (a bundled pack of generic skills the repo's work never calls):
@@ -413,7 +413,7 @@ every write.
 
 ## Related
 
-- `skill-creator` — the improvement engine; hand off Improve/Update work to it.
+- `skill-writer` — the improvement engine; hand off Improve/Update work to it.
 - `skill-health` — the deterministic structural layer (dangling references, ownership,
   the description-fold recipe).
 - `rules-stocktake` — the same audit for `<harness>/rules/` (residency cost instead of

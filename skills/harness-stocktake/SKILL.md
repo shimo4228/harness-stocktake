@@ -178,7 +178,7 @@ One JSON object per item. Every field is plain text unless noted.
 | `alternatives` | array of other verdict words the author may pick instead (optional) |
 | `reason` | the source's Reason-quality text: self-contained, decision-enabling on its own |
 | `evidence` | array of the No answers, each "question — one-line evidence". A count is the number the Glob / Grep output shows; a `file:line` is read back with Read before it is written; "no reference" or "unused" rests on a search of the whole repo (`docs/plans/`, runbooks and configs included); a claim about Claude Code's own runtime behavior cites its source or says it is unverified (未確認 in a `ja` report) |
-| `change` | the concrete change: a diff summary, the draft text, or for a skill Improve the skill-creator intent packet (what to fix, which sections, the No list) |
+| `change` | the concrete change: a diff summary, the draft text, or for a skill Improve the skill-writer intent packet (what to fix, which sections, the No list) |
 | `impact` | what depends on the target (pointers in rules, agents, MEMORY, other skills) |
 | `conflicts` | array of item ids this item collides with (`render_report.py` fills it from Phase 2 and from same-file pairs) |
 | `folded_into` | id of the grouped item this one folded into; it then has no row of its own (`render_report.py` fills it) |
@@ -304,10 +304,10 @@ ends in its own commit. For each item:
 2. **Apply** by target kind:
    - rules, agents, hooks, docs, configs: edit in place following the source skill's own rules
      (rules-stocktake for rules, and so on)
-   - skills (Improve, Update, Merge residue, a Demote's new skill): when the setup has a
-     skill-writing skill (skill-creator), run it on its **report path** with the item's `change` as
-     the intent packet; otherwise edit the SKILL.md from the intent packet directly, keeping its
-     frontmatter
+   - skills (Improve, Update, Merge residue, a Demote's new skill): when skill-writer sits next to
+     this skill (`${CLAUDE_SKILL_DIR}/../skill-writer/SKILL.md`, which the plugin ships), open it with
+     Read and run its **report path** with the item's `change` as the intent packet; otherwise edit
+     the SKILL.md from the intent packet directly, keeping its frontmatter
    - Retire / Dissolve: delete the way the source skill says (`git rm` for skills, rules, agents
      and hooks; soft-delete for repo-asset-stocktake), plus the pointer fixes in `change`; for
      Dissolve, record why the way the repo records decisions (an ADR via skill `adr-writer` when
@@ -363,7 +363,7 @@ one source; `stocktake/<date>` in Phases 4–5 reads `stocktake/<date>-<source>`
 
 - skill-stocktake / rules-stocktake / agent-stocktake / hook-stocktake / rules-distill /
   context-sync / repo-asset-stocktake — the sources; each owns its verdict rules and ledger
-- skill-creator (when installed) — its report path applies a skill item without the entry
+- skill-writer (when installed) — its report path applies a skill item without the entry
   confirmation and the read-through, which this skill's two decisions replace
 - generation-audit (when installed) — on a model-generation change it feeds evidence into the
   sources and uses this report for its own line fixes
