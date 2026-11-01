@@ -99,12 +99,12 @@ Two readings the script hands you but cannot make for you:
 **Reference-URL evidence** (parent-owned for the same reason, plus one of its own: Phase 2
 runs batch agents *in parallel*, and `fetch named URLs` inside each of them is a burst
 against the same hosts — the pattern rate limiters punish). Check every URL
-the library names once, serially, here (the scripts live in the sibling `skill-health` skill, when it is
-installed next to this one; without it, the URLs are `n/a` evidence):
+the library names once, serially, here (the scripts live in the sibling `skill-health` skill, which the
+plugin ships next to this one; when it is not installed, the URLs are `n/a` evidence):
 
 ```bash
 set -o pipefail   # without it a producer crash reads as "0 dead links, all healthy"
-uv run --frozen --project "${CLAUDE_SKILL_DIR}/../skill-health" python -m scripts.scan_refs --external-urls |
+uv run --frozen --project "${CLAUDE_SKILL_DIR}/../skill-health" python -m scripts.scan_refs <harness>/skills --external-urls |
   uv run --frozen --project "${CLAUDE_SKILL_DIR}/../skill-health" python -m scripts.url_liveness --urls-from -
 ```
 

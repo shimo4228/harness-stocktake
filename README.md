@@ -68,7 +68,7 @@ A run uses your Claude Code plan like any long session. Measured in API-equivale
 <details>
 <summary>The seven audits, project mode, scheduling, measurement conditions</summary>
 
-harness-stocktake 0.1.0 (pre-release) is a Claude Code plugin of eight skills: `skills/harness-stocktake/SKILL.md` runs the other seven as sources and owns the report and apply steps; each source's `SKILL.md` owns its own verdict rules. Requirements: Claude Code 2.1.275+, git, Python 3.11+, uv. License: MIT.
+harness-stocktake 0.1.0 (pre-release) is a Claude Code plugin of nine skills: `skills/harness-stocktake/SKILL.md` runs seven of the others as sources and owns the report and apply steps; each source's `SKILL.md` owns its own verdict rules. `skill-health` is the scanner skill-stocktake uses to check that the paths and URLs your skills name still resolve. Requirements: Claude Code 2.1.275+, git, Python 3.11+, uv. License: MIT.
 
 ### The seven audits
 
