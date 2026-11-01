@@ -174,7 +174,7 @@ One JSON object per item. Every field is plain text unless noted.
 | `verdict` | the source's verdict word (`Retire`, `Merge into X`, `Improve`, `Append`, …) |
 | `alternatives` | array of other verdict words the author may pick instead (optional) |
 | `reason` | the source's Reason-quality text: self-contained, decision-enabling on its own |
-| `evidence` | array of the No answers, each "question — one-line evidence". A count is the number the Glob / Grep output shows; a `file:line` is read back with Read before it is written; "no reference" or "unused" rests on a search of the whole repo (`docs/plans/`, runbooks and configs included); a claim about Claude Code's own runtime behavior cites its source or says 未確認 |
+| `evidence` | array of the No answers, each "question — one-line evidence". A count is the number the Glob / Grep output shows; a `file:line` is read back with Read before it is written; "no reference" or "unused" rests on a search of the whole repo (`docs/plans/`, runbooks and configs included); a claim about Claude Code's own runtime behavior cites its source or says it is unverified (未確認 in a `ja` report) |
 | `change` | the concrete change: a diff summary, the draft text, or for a skill Improve the skill-creator intent packet (what to fix, which sections, the No list) |
 | `impact` | what depends on the target (pointers in rules, agents, MEMORY, other skills) |
 | `conflicts` | array of item ids this item collides with (`render_report.py` fills it from Phase 2 and from same-file pairs) |

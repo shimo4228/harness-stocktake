@@ -8,7 +8,9 @@ harness-stocktake audits a whole Claude Code setup in one pass: skills, rules, a
 
 ## The first three minutes
 
-1. Install. This adds this repository as a plugin marketplace and installs the plugin (Claude Code 2.1.275 or later):
+You need Claude Code 2.1.275 or later, git, Python 3.11 or later, and [uv](https://docs.astral.sh/uv/) (two audits run their standard-library scripts through `uv run`).
+
+1. Install. This adds this repository as a plugin marketplace and installs the plugin:
 
    ```bash
    claude plugin install harness-stocktake --marketplace shimo4228/harness-stocktake
@@ -21,11 +23,16 @@ harness-stocktake audits a whole Claude Code setup in one pass: skills, rules, a
    ```
 
    It audits `~/.claude`. To audit the `.claude/` folder of one project instead, add `--project <path to the repo>`.
-3. The first findings appear about two minutes in, as each audit writes its section under `.notes/stocktake/<date>/sections/` in the audited folder. The run ends with the path of `report.md` and a count per group.
+3. The first findings appear about two minutes in, as each audit writes its section under `.notes/stocktake/<date>/sections/` in the audited folder; open that folder to watch them arrive. The run ends with the path of `report.md` and a count per group.
 
-Claude Code asks before each command the run wants to use (git, python3). Answer "allow for this session" to let it finish without more prompts.
+Claude Code asks before each command the run wants to use (`git`, `python3`, `uv`, `date`, and `claude` for two child checks). Answer "allow for this session" to let it finish without more prompts. From a script or another `claude -p`, where nobody can answer prompts, allow them up front:
 
-In the measured runs, the first finding appeared at a median of 138 seconds (14 public harnesses). A small to medium harness has its whole report within 10 minutes; one with several hundred skills takes 10 to 15 minutes.
+```bash
+claude -p "/harness-stocktake:harness-stocktake --dry-run" \
+  --allowedTools "Read,Grep,Glob,Write,Edit,Agent,Bash(git:*),Bash(python3:*),Bash(uv:*),Bash(date:*),Bash(claude:*)"
+```
+
+In the measured runs, the first finding appeared at a median of 138 seconds (14 public harnesses). A small to medium harness has its whole report within 10 minutes; the largest ones measured took 11 to 15 minutes.
 
 ## What the report looks like
 
@@ -33,20 +40,22 @@ Each finding is one row: a verdict (Retire, Merge, Improve, Update, Keep), the f
 
 [`examples/sample-report.md`](examples/sample-report.md) is a real report from the sample harness in [`examples/sample-harness/`](examples/sample-harness/), a small project with ordinary drift: a hook wired to a missing script, two skills that do the same review, an agent pinned to a retired model, `CLAUDE.md` naming a `make` target that does not exist.
 
-To override a finding, edit its `decision` cell (`skip`, `Keep`, another verdict, or a note). Then say "approved" in the chat.
+A `--dry-run` report is for reading. To act on the findings, run again without `--dry-run`: the report is the same, and this time you can override a finding by editing its `decision` cell (`skip`, `Keep`, another verdict, or a note) and then say "approved" in the chat.
+
+Checks that need usage history (which skills you never use) read a usage log only if your setup keeps one under `~/.claude/metrics/`. Without it they are marked `n/a`, and `/doctor` covers unused skills.
 
 ## What it reads, writes and sends
 
 - **Reads** the files of the harness it audits: `~/.claude` (or the `--project` repo) — skills, rules, agents, `settings.json` hooks and the scripts they call, `CLAUDE.md`, `AGENTS.md`, ADRs, `README.md`, configs. If present, it also reads usage logs under `~/.claude/metrics/` and the MCP server names in `~/.claude.json` and `~/.claude/.mcp.json`.
-- **Writes** with `--dry-run`: only the run folder `.notes/stocktake/<date>/` inside the audited folder. Without `--dry-run`, after you approve: a git worktree and a branch `stocktake/<date>` with one commit per audit, and each audit's `results.json` ledger next to its skill. It never merges; you do.
-- **Runs** `git`, `python3` (standard library only) and, for two checks, a child `claude -p` session: `/skill-doctor` for what each skill's listing costs, and a rules transfer probe. Both children run with hooks off, no MCP servers, and no tools that write, fetch or reach the shell.
-- **Sends** nothing anywhere beyond your own Claude Code session. There is no telemetry and no network fetch.
+- **Writes** with `--dry-run`: only the run folder `.notes/stocktake/<date>/` inside the audited folder. Without `--dry-run`, after you approve: a git worktree and a branch `stocktake/<date>` with one commit per audit. Auditing `~/.claude`, each audit also keeps a `results.json` ledger in its own skill folder inside the plugin's install folder (`--project` runs write none). It never merges; you do.
+- **Runs** `git`, `python3` (standard library only) and, for two checks, a child `claude -p` session: `/skill-doctor` for what each skill's listing costs, and a probe that checks in fresh sessions whether the model already does what a rule asks without the rule. Both children run with hooks off, no MCP servers, and no tools that write, fetch or reach the shell.
+- **Sends** nothing anywhere beyond your own Claude Code session. There is no telemetry and no network fetch. Two exceptions you opt into: with `--unattended`, the closing lines go to the notifier command you name; in the Claude desktop app with a Japanese-language report, the report is also published as a private Artifact page.
 
-The audited files are treated as data: an instruction inside a `SKILL.md` or `CLAUDE.md` is quoted as evidence, never carried out. For a repository you do not trust, use `skills/harness-stocktake/scripts/isolated-dry-run.sh <repo> <out-dir>`, which runs the audit from an empty folder with no shell, no MCP servers and no settings files, so the repo's hooks cannot run.
+The audited files are treated as data: an instruction inside a `SKILL.md` or `CLAUDE.md` is quoted as evidence, never carried out. For a repository you do not trust, clone this repo and use `skills/harness-stocktake/scripts/isolated-dry-run.sh <repo> <out-dir>`, which runs the audit from an empty folder with no shell, no MCP servers and no settings files, so the repo's hooks cannot run.
 
 ## How it relates to /doctor
 
-Claude Code's own checks cover usage and writing style: `/doctor` lists unused plugins, MCP servers and skills and slow hooks, and `/doctor prompt-audit` flags writing aimed at older models. harness-stocktake judges content across files: a rule that contradicts a skill, a hook whose script is gone, an ADR that no longer matches the code, two agents doing one job. The two find different things, so run both.
+Claude Code's own checks (as of Claude Code 2.1.316) cover usage and writing style: `/doctor` lists unused plugins, MCP servers and skills and slow hooks, and `/doctor prompt-audit` flags writing aimed at older models. harness-stocktake judges content across files: a rule that contradicts a skill, a hook whose script is gone, an ADR that no longer matches the code, two agents doing one job. The two find different things, so run both.
 
 ## How accurate it is
 
@@ -59,6 +68,8 @@ A run uses your Claude Code plan like any long session. Measured in API-equivale
 <details>
 <summary>The seven audits, project mode, scheduling, measurement conditions</summary>
 
+harness-stocktake 0.1.0 (pre-release) is a Claude Code plugin of eight skills: `skills/harness-stocktake/SKILL.md` runs the other seven as sources and owns the report and apply steps; each source's `SKILL.md` owns its own verdict rules. Requirements: Claude Code 2.1.275+, git, Python 3.11+, uv. License: MIT.
+
 ### The seven audits
 
 | Source | Skill | What it looks at |
@@ -69,7 +80,7 @@ A run uses your Claude Code plan like any long session. Measured in API-equivale
 | `distill` | rules-distill | principles repeated across skills that belong in a rule |
 | `skills` | skill-stocktake | skills: overlap, staleness, listing cost |
 | `assets` | repo-asset-stocktake | configs, scripts and docs whose consumer is gone |
-| `rules` | rules-stocktake | rules: residency cost, staleness, redundancy |
+| `rules` | rules-stocktake | rules: what each costs by being loaded every session, staleness, redundancy |
 
 Each runs alone too, for example `/harness-stocktake:skill-stocktake`.
 
@@ -89,11 +100,11 @@ Applying changes needs the audited folder to be a git repository. If `~/.claude`
 
 ### Scheduling
 
-A monthly run is a scheduled `claude -p "/harness-stocktake:harness-stocktake --unattended"` from cron, a scheduled task or CI. Name the command that should receive the closing lines (a notifier) in the prompt.
+A monthly run is a scheduled `claude -p "/harness-stocktake:harness-stocktake --unattended"` from cron, a scheduled task or CI, with the commands allowed up front as in the `claude -p` example above. Name the command that should receive the closing lines (a notifier) in the prompt.
 
 ### Measurement conditions
 
-Measured 2026-11-01 on Claude Code 2.1.316 with Opus, on public harnesses cloned locally and audited read-only with `isolated-dry-run.sh` (no one was contacted; repository names are not published). Time to the first finding: median 138 seconds over 14 runs. Report within 10 minutes: 11 of 14; the three over it were the runs with the most findings (91 to 135 items). Accuracy: 60 findings drawn by stratified sampling across the seven audits and checked by a different model with read-only access to each repository.
+Measured 2026-11-01 on Claude Code 2.1.316 with Opus, on public harnesses cloned locally and audited read-only with `isolated-dry-run.sh` (no one was contacted; repository names are not published). Time to the first finding: median 138 seconds over 14 runs. Report within 10 minutes: 11 of 14; the three over it (11 to 15 minutes) were the largest harnesses, 135 to 156 items each, where the audits themselves ran longest. Accuracy: 60 findings drawn by stratified sampling across the seven audits and checked by a different model with read-only access to each repository.
 
 `bench/time-to-first-item.sh` reproduces the install-to-report path on the sample harness and records seconds and cost.
 
