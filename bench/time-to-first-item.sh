@@ -9,7 +9,8 @@
 #              a local path tests an unpushed checkout)
 #   --model    model of the audit run (default: opus)
 #   --timeout  cap on the audit run in seconds (default: 1200)
-#   --out      new or empty directory for the results (default: bench/out/<UTC timestamp>)
+#   --out      new or empty directory for the results, outside any git work tree so no CLAUDE.md
+#              above it loads (default: a new mktemp directory)
 #
 # Writes into <out>:
 #   cfg/          a throwaway CLAUDE_CONFIG_DIR the plugin is installed into (step 1)
@@ -45,7 +46,7 @@ while [[ $# -gt 0 ]]; do
     *) die "unknown argument: $1" ;;
   esac
 done
-[[ -n $out ]] || out=$repo/bench/out/$(date -u +%Y%m%dT%H%M%SZ)
+[[ -n $out ]] || out=$(mktemp -d)
 [[ ! -e $out || -z $(ls -A -- "$out") ]] || die "out-dir is not empty: $out"
 mkdir -p -- "$out"
 out=$(cd -- "$out" && pwd -P)
@@ -60,9 +61,9 @@ CLAUDE_CONFIG_DIR=$out/cfg claude plugin install harness-stocktake --marketplace
   >"$out/install.txt" 2>&1 || { cat "$out/install.txt" >&2; die "install failed"; }
 install_s=$(($(date +%s) - t0))
 printf 'seconds=%s\n' "$install_s" >>"$out/install.txt"
-manifest=$(find "$out/cfg/plugins" -path '*/.claude-plugin/plugin.json' -print 2>/dev/null |
+manifest=$(find "$out/cfg/plugins/cache" -path '*/.claude-plugin/plugin.json' -print 2>/dev/null |
   while IFS= read -r m; do grep -q '"name": *"harness-stocktake"' "$m" && { echo "$m"; break; }; done)
-[[ -n $manifest ]] || die "installed plugin not found under $out/cfg/plugins"
+[[ -n $manifest ]] || die "installed plugin not found under $out/cfg/plugins/cache"
 plugin_dir=$(dirname -- "$(dirname -- "$manifest")")
 
 # Step 2 — the sample harness as a repository of its own.

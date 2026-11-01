@@ -113,7 +113,7 @@ import pathlib, re, sys
 staging = pathlib.Path(sys.argv[1])
 forbidden = re.compile(
     r"\b(?:ADR|RFC)-\d{4}\b|\bHerdr\b|\bSlack\b|\blaunchd\b|triage-tick|notify-slack"
-    r"|~/\.claude/(?!(?:rules|agents|skills)\b)[\w.-]"
+    r"|(?:~|\$HOME|\$\{HOME\})/\.claude/(?!(?:rules|agents|skills)\b)[\w.-]"
 )
 bad = []
 for md in sorted(staging.glob("skills/**/*.md")) + sorted(staging.glob("skills/**/*.html")):
