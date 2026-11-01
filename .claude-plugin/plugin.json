@@ -1,7 +1,7 @@
 {
   "name": "harness-stocktake",
   "displayName": "Harness Stocktake",
-  "description": "Audits your whole Claude Code setup (skills, rules, agents, hooks, CLAUDE.md, ADRs, configs) into one report and applies what you approve on a branch. Start with /harness-stocktake:harness-stocktake --dry-run: it only reads, and writes a Markdown report.",
+  "description": "Audit and clean up your whole Claude Code harness (skills, rules, agents, hooks, CLAUDE.md, ADRs, configs) in one report and one approval: a hygiene pass that applies what you approve on a branch. Start with /harness-stocktake:harness-stocktake --dry-run: it only reads, and writes a Markdown report.",
   "icon": "./.claude-plugin/icon.png",
   "version": "0.1.0",
   "author": {
@@ -21,6 +21,9 @@
     "hooks",
     "rules",
     "subagents",
-    "harness"
+    "harness",
+    "hygiene",
+    "cleanup",
+    "lint"
   ]
 }

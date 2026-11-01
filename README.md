@@ -4,7 +4,7 @@
 **First run:** open `claude` and type `/harness-stocktake:harness-stocktake --dry-run` (reads only, writes one Markdown report).<br>
 **What it finds:** what `/doctor` leaves behind: stale references, contradictions between files, hooks wired to scripts that are gone, rules that repeat a skill.
 
-harness-stocktake audits a whole Claude Code setup in one pass: skills, rules, agents, hooks and their settings, `CLAUDE.md`, ADRs and configs. Seven audits run in parallel, and their findings land in one report you can approve in one go. Nothing changes until you approve; then the changes go onto a branch, and you merge it.
+Audit and clean up your whole Claude Code harness (skills, rules, agents, hooks and their settings, `CLAUDE.md`, ADRs and configs) in one report and one approval: a hygiene pass across files. Seven audits run in parallel, and their findings land in one report you can approve in one go. Nothing changes until you approve; then the changes go onto a branch, and you merge it.
 
 ## The first three minutes
 
