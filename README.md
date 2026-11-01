@@ -8,7 +8,12 @@ harness-stocktake audits a whole Claude Code setup in one pass: skills, rules, a
 
 ## The first three minutes
 
-1. Install with the line above. It adds this repository as a plugin marketplace and installs the plugin.
+1. Install. This adds this repository as a plugin marketplace and installs the plugin (Claude Code 2.1.275 or later):
+
+   ```bash
+   claude plugin install harness-stocktake --marketplace shimo4228/harness-stocktake
+   ```
+
 2. Start Claude Code anywhere and type:
 
    ```text
