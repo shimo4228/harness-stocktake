@@ -1,0 +1,8 @@
+# Changelog
+
+## 0.1.0 — unreleased
+
+- First release: harness-stocktake and its seven source audits (skill-stocktake, rules-stocktake,
+  agent-stocktake, hook-stocktake, rules-distill, context-sync, repo-asset-stocktake) as one plugin.
+- `--dry-run` writes a Markdown report and changes nothing; `--project <repo>` audits a repository's `.claude/`.
+- `examples/sample-harness/` and `bench/time-to-first-item.sh` reproduce the install-to-report path.

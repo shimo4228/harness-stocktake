@@ -1,0 +1,25 @@
+{
+  "name": "harness-stocktake",
+  "displayName": "Harness Stocktake",
+  "description": "Audits your whole Claude Code setup (skills, rules, agents, hooks, CLAUDE.md, ADRs, configs) into one report and applies what you approve on a branch. Start with /harness-stocktake:harness-stocktake --dry-run: it only reads, and writes a Markdown report.",
+  "version": "0.1.0",
+  "author": {
+    "name": "shimo4228",
+    "url": "https://github.com/shimo4228"
+  },
+  "homepage": "https://github.com/shimo4228/harness-stocktake",
+  "repository": "https://github.com/shimo4228/harness-stocktake",
+  "documentationUrl": "https://github.com/shimo4228/harness-stocktake#readme",
+  "supportUrl": "https://github.com/shimo4228/harness-stocktake/issues",
+  "license": "MIT",
+  "keywords": [
+    "audit",
+    "stocktake",
+    "claude-md",
+    "skills",
+    "hooks",
+    "rules",
+    "subagents",
+    "harness"
+  ]
+}

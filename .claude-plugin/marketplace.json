@@ -1,0 +1,14 @@
+{
+  "name": "harness-stocktake",
+  "owner": {
+    "name": "shimo4228"
+  },
+  "description": "Marketplace for the harness-stocktake plugin.",
+  "plugins": [
+    {
+      "name": "harness-stocktake",
+      "source": "./",
+      "description": "Audits your whole Claude Code setup into one report and applies what you approve on a branch. Start with /harness-stocktake:harness-stocktake --dry-run."
+    }
+  ]
+}
