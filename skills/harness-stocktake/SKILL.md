@@ -69,9 +69,12 @@ The sources read these places in the repo; the global `~/.claude` stays out of s
 | `docs` | `CLAUDE.md`, `docs/adr/`, `README.md` | `CLAUDE.md` or `.claude/CLAUDE.md`, `AGENTS.md`, the ADR directory if any, `README.md` |
 | `assets` | harness configs and scripts | the whole repo |
 
-- Each source runs its full mode. Its ledger (the `results.json` its skill names) and the usage
-  logs a setup may keep under `<harness>/metrics/` describe the operator's own harness, so project
-  mode reads neither and writes neither, and records usage evidence as `n/a`. A check that a source
+- Each source runs its full mode. Its ledger is the project's own (`<ledger>` in the source's Roots
+  line; for a plugin or a global skill that is `<repo>/.claude/stocktake/<skill>.json`): read it,
+  and update it on the apply branch. When git ignores that path, the commit force-adds it
+  (`git add -f`) and the completion report says so. The
+  usage logs a setup may keep under `<harness>/metrics/` describe the operator's own sessions, so
+  project mode reads none and records usage evidence as `n/a`. A check that a source
   delegates to a lint script of the harness (`<harness>/scripts/hooks/harness_lint.py`, when the
   harness has one) is done with Read / Grep / Glob instead.
   repo-asset-stocktake's ledger (`<repo>/.repo-asset-stocktake.json`) is written only on the apply branch
@@ -137,8 +140,8 @@ Agent tool of its own to split with. skill-stocktake's parent steps run as follo
 Give each subagent the source id, both roots, `<run>`, the mode flags, the report language (`en` or `ja`, Phase 3), the item schema below, and
 the path of its skill — `${CLAUDE_SKILL_DIR}/../<name>/SKILL.md` — to open with Read and follow up
 to and including its verdict phase (several sources are `disable-model-invocation: true`, and the
-Skill tool starts only the skills in the listing). Under `--dry-run` or in project mode the source
-writes no ledger: what its ledger-hygiene step would fix becomes an item instead. Tell every source
+Skill tool starts only the skills in the listing). Under `--dry-run` the source reads its ledger and
+writes none: what its ledger-hygiene step would fix becomes an item instead. Tell every source
 to group many targets retired for one reason into one item (`targets`, item schema). Without the
 Agent tool, run the sources one by one in the table order.
 

@@ -14,7 +14,7 @@ matching event, it can block, and it reads repo-controlled data (paths, commit m
 input). So the questions are wiring, evidence that it still earns its place, test coverage, and
 its share of the harness threat surface (rule `security.md`).
 
-**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply).
+**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/hook-stocktake.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
 The paths and conventions below are the author's harness layout. In another
 setup, map each target to where that setup keeps its hooks, and record a check whose input the
@@ -106,7 +106,7 @@ contract's Phases 2–5 with its own items.
 Every `reason` is self-contained and cites the No answers (question + one-line evidence), as in
 skill-stocktake's Reason quality section.
 
-**Ledger** `${CLAUDE_SKILL_DIR}/results.json`, updated on the apply branch in the same commit:
+**Ledger** `<ledger>`, updated on the apply branch in the same commit:
 
 ```json
 {

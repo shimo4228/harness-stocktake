@@ -6,3 +6,4 @@
   agent-stocktake, hook-stocktake, rules-distill, context-sync, repo-asset-stocktake) as one plugin.
 - `--dry-run` writes a Markdown report and changes nothing; `--project <repo>` audits a repository's `.claude/`.
 - `examples/sample-harness/` and `bench/time-to-first-item.sh` reproduce the install-to-report path.
+- Each audit's verdict history lives in the audited harness (`stocktake/<audit>.json`) and is committed on the `stocktake/<date>` branch with the changes.

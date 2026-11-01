@@ -31,20 +31,20 @@ this skill exists as a third sibling next to skill-stocktake and rules-stocktake
 > read in one context — delegation would be overengineering. The handoff exception is Demote to skill
 > (creating a skill is skill-creator's job).
 
-**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply).
+**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/agent-stocktake.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
 ## Modes (`$ARGUMENTS`)
 
 | Argument | Behavior |
 |----------|----------|
 | none / `full` | Read and evaluate every agent definition (default) |
-| `changed` | Re-evaluate only files whose mtime is newer than `results.json`'s `evaluated_at`; carry the rest forward from the ledger |
+| `changed` | Re-evaluate only files whose mtime is newer than `<ledger>`'s `evaluated_at`; carry the rest forward from the ledger |
 
 `changed` detects changes inline (no script):
 > Paths below start at `${CLAUDE_SKILL_DIR}`, the directory holding this SKILL.md; an agent that does not substitute the variable reads it as that directory.
 
 ```bash
-find <harness>/agents -name "*.md" -newermt "$(jq -r .evaluated_at "${CLAUDE_SKILL_DIR}/results.json")"
+find <harness>/agents -name "*.md" -newermt "$(jq -r .evaluated_at "<ledger>")"
 ```
 
 As in rules-stocktake, the Phase 1 integrity checks **always run over the full set** —
@@ -261,7 +261,7 @@ Dissolve / Retire → Merge / Demote → Improve / Update → Keep, take one app
 overrides, then apply.
 
 - **Update the ledger** on the apply branch, in the same commit as the changes: Read
-  `results.json` → merge verdicts (an item the author skipped keeps its verdict with
+  `<ledger>` → merge verdicts (an item the author skipped keeps its verdict with
   `"skipped": true`) → Write back (`evaluated_at` = real UTC from
   `date -u +%Y-%m-%dT%H:%M:%SZ`). In `changed` mode, preserve prior verdicts of files not
   re-evaluated.
@@ -282,7 +282,7 @@ cite the No answers (question + one-line evidence):
 - **Merge**: name the target + what to integrate.
 - **Keep** (carry-forward in `changed` mode): restate the rationale.
 
-## results.json (lean ledger)
+## Ledger (`<ledger>`, lean)
 
 ```json
 {

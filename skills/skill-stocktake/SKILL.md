@@ -22,20 +22,20 @@ skill-creator is the fixer.
 > per-item judgment gets narrow, fresh contexts; set-level judgment gets a light
 > description sweep with targeted deep reads.
 
-**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply).
+**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/skill-stocktake.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
 ## Modes (`$ARGUMENTS`)
 
 | Argument | Behavior |
 |----------|----------|
 | none / `full` | Evaluate every skill (default) |
-| `changed` | Re-evaluate only skills whose `SKILL.md` mtime is newer than `results.json`'s `evaluated_at`; carry the rest forward from the ledger. Phase 0 and Phase 3 still run over the full set (structural debt, overlap, and contradiction are set properties) |
+| `changed` | Re-evaluate only skills whose `SKILL.md` mtime is newer than `<ledger>`'s `evaluated_at`; carry the rest forward from the ledger. Phase 0 and Phase 3 still run over the full set (structural debt, overlap, and contradiction are set properties) |
 
 `changed` detects changes inline (no script):
 > Paths below start at `${CLAUDE_SKILL_DIR}`, the directory holding this SKILL.md; an agent that does not substitute the variable reads it as that directory.
 
 ```bash
-find <harness>/skills -name SKILL.md -newermt "$(jq -r .evaluated_at "${CLAUDE_SKILL_DIR}/results.json")"
+find <harness>/skills -name SKILL.md -newermt "$(jq -r .evaluated_at "<ledger>")"
 ```
 
 ## Phase 0 — Structural pre-pass (deterministic, code-owned)
@@ -48,7 +48,7 @@ Run BEFORE any LLM judgment. These checks never ride on per-item attention:
    names it points to that are not installed, skill directories that are symlinks — with
    Glob / Grep / Read). Mandatory, not optional: this is the structural layer of Curate — code enumerates the debt,
    judgment decides — and judgment-owned checks let exactly these defects through.
-2. **Ledger hygiene** — for every `results.json` entry: the path must exist on disk and
+2. **Ledger hygiene** — for every `<ledger>` entry: the path must exist on disk and
    the key must follow the canonical rule below. Dedup violations (same path under two
    keys → keep the canonical key, delete the duplicate). Entries whose path no longer
    exists are removed (note them in the report as retired-from-disk).
@@ -369,7 +369,7 @@ Retire → Merge → Improve / Update → Keep, take one approval with the autho
 apply.
 
 **Update the ledger** on the apply branch, in the same commit as the changes: Read
-`results.json` → merge this run's verdicts (an item the author skipped keeps its verdict with
+`<ledger>` → merge this run's verdicts (an item the author skipped keeps its verdict with
 `"skipped": true`) → Write it back (`evaluated_at` = real UTC from
 `date -u +%Y-%m-%dT%H:%M:%SZ`). In `changed` mode, preserve the prior verdicts of skills you did
 not re-evaluate.
@@ -391,7 +391,7 @@ the **No answers from the binary screen / pressure-test** (question + one-line e
   to reach ~150 lines."`
 - **Keep** (mtime-only change in `changed` mode): restate the original rationale.
 
-## results.json (lean ledger)
+## Ledger (`<ledger>`, lean)
 
 ```json
 {
@@ -408,8 +408,7 @@ the **No answers from the binary screen / pressure-test** (question + one-line e
 ```
 
 A ledger for verdict history and the last-audit timestamp only. Update it inline with
-Read/Write, not a script. Global skills only (project skills are read fresh from cwd,
-not cached here). Phase 0's hygiene rules (canonical keys, existing paths) are part of
+Read/Write, not a script. One ledger per audited harness. Phase 0's hygiene rules (canonical keys, existing paths) are part of
 every write.
 
 ## Related

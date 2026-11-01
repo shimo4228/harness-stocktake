@@ -31,20 +31,20 @@ instruction dilution.
 > would be overengineering. The handoff exception is Demote (creating a new skill is
 > skill-creator's job).
 
-**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply).
+**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/rules-stocktake.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
 ## Modes (`$ARGUMENTS`)
 
 | Argument | Behavior |
 |----------|----------|
 | none / `full` | Read and evaluate every rule (default) |
-| `changed` | Re-evaluate only rules whose mtime is newer than `results.json`'s `evaluated_at`; carry the rest forward from the ledger |
+| `changed` | Re-evaluate only rules whose mtime is newer than `<ledger>`'s `evaluated_at`; carry the rest forward from the ledger |
 
 `changed` detects changes inline (no script):
 > Paths below start at `${CLAUDE_SKILL_DIR}`, the directory holding this SKILL.md; an agent that does not substitute the variable reads it as that directory.
 
 ```bash
-find <harness>/rules -name "*.md" -newermt "$(jq -r .evaluated_at "${CLAUDE_SKILL_DIR}/results.json")"
+find <harness>/rules -name "*.md" -newermt "$(jq -r .evaluated_at "<ledger>")"
 ```
 
 **The Phase 1 integrity checks always run over the full set, including in `changed`
@@ -195,7 +195,7 @@ On the apply branch, in the same commit as the changes:
 
 - **Sync README.md**: any file added/renamed/removed → update the table row and its one-line
   description (pairs with the Phase 1 consistency check).
-- **Update the ledger**: Read `results.json` → merge this run's verdicts (an item the author
+- **Update the ledger**: Read `<ledger>` → merge this run's verdicts (an item the author
   skipped keeps its verdict with `"skipped": true`) → Write it back (`evaluated_at` = real UTC
   from `date -u +%Y-%m-%dT%H:%M:%SZ`). In `changed` mode, preserve prior verdicts of rules not
   re-evaluated.
@@ -212,7 +212,7 @@ alone is banned. For non-Keep verdicts, cite the No answers (question + one-line
 - **Merge**: name the target + what to integrate. Bad: `"Overlaps"` / Good: `"§Commit gate duplicates security.md's repo gate line; only the bypass note is unique — fold it into security.md's repo gate line."`
 - **Keep** (carry-forward in `changed` mode): restate the rationale. Bad: `"Unchanged"` / Good: `"Content unchanged. 42-line fix-chain gate referenced by planning.md's 2-intervention model; no absorber in current harness."`
 
-## results.json (lean ledger)
+## Ledger (`<ledger>`, lean)
 
 ```json
 {

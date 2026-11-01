@@ -13,7 +13,7 @@ Scan installed skills, find principles that belong in the **always-loaded rules 
 them into rules — appending to, revising, or creating rule files. The skill produces
 candidates and verdicts; it **never edits rules without your approval**.
 
-**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply).
+**Roots.** `<harness>` below is the harness this audit covers: `~/.claude` by default, or a repository's `.claude/` when skill `harness-stocktake` runs in project mode (its Roots section maps the paths, names the evidence that is `n/a` there, and says which convention checks apply). The ledger `<ledger>` belongs to that harness: `${CLAUDE_SKILL_DIR}/results.json` when this skill's directory is inside `<harness>` (the harness carries its own copy of the skill), else `<harness>/stocktake/rules-distill.json` (an installed plugin, or project mode). Either way it is committed with the harness's other changes on the apply branch.
 
 ## When to Use
 
@@ -128,7 +128,7 @@ the author's overrides and edits, then apply. Skipped candidates go to the ledge
 
 > Paths below start at `${CLAUDE_SKILL_DIR}`, the directory holding this SKILL.md; an agent that does not substitute the variable reads it as that directory.
 
-Then update the ledger `${CLAUDE_SKILL_DIR}/results.json` inline (Read → merge → Write):
+Then update the ledger `<ledger>` inline (Read → merge → Write):
 
 ```json
 {
