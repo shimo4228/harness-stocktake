@@ -8,7 +8,7 @@
     {
       "name": "harness-stocktake",
       "source": "./",
-      "description": "Audit and clean up your whole Claude Code harness in one report and one approval. Start with /harness-stocktake:harness-stocktake --dry-run."
+      "description": "Audits your whole Claude Code harness for stale, contradictory or duplicated content, and changes only what you approve. Start with /harness-stocktake:harness-stocktake --dry-run."
     }
   ]
 }
