@@ -113,3 +113,5 @@ Measured 2026-11-01 on Claude Code 2.1.316 with Opus, on public harnesses cloned
 ## License
 
 MIT. Issues and questions: [github.com/shimo4228/harness-stocktake/issues](https://github.com/shimo4228/harness-stocktake/issues).
+
+harness-stocktake implements the Curate phase of the Agent Knowledge Cycle (AKC) — DOI [10.5281/zenodo.19200727](https://doi.org/10.5281/zenodo.19200727).

@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "harness-stocktake implements the Curate phase of the Agent Knowledge Cycle (AKC). If you use or reference it, please cite it as below, and cite AKC for the cycle it implements."
+type: software
+title: "harness-stocktake"
+version: "0.1.0"
+abstract: "A Claude Code plugin that audits and cleans up a whole Claude Code harness — skills, rules, agents, hooks, CLAUDE.md, ADRs and configs — in one report and one approval, then applies the approved changes on a branch."
+authors:
+  - family-names: Shimomoto
+    given-names: Tatsuya
+    alias: shimo4228
+    orcid: "https://orcid.org/0009-0002-6168-4162"
+license: MIT
+repository-code: https://github.com/shimo4228/harness-stocktake
+keywords:
+  - claude-code
+  - plugin
+  - audit
+  - hygiene
+  - agent-knowledge-cycle
+references:
+  - type: software
+    title: "Agent Knowledge Cycle (AKC)"
+    doi: 10.5281/zenodo.19200727
+    authors:
+      - family-names: Shimomoto
+        given-names: Tatsuya
+        alias: shimo4228
+        orcid: "https://orcid.org/0009-0002-6168-4162"
+    repository-code: https://github.com/shimo4228/agent-knowledge-cycle
