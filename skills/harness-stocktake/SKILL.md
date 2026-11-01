@@ -44,6 +44,11 @@ Every path this skill and its sources name starts at one of two roots:
 
 The run directory `<run>` is `--out`, else `<repo>/.notes/stocktake/<YYYY-MM-DD>/`.
 
+Phases 1–3 use git on `<repo>` only for `blob`; when `<repo>` is not a git repository (a
+`~/.claude` that was never put under git), `blob` is `-`. Phase 4 needs a git repository: without
+one, the run ends after the report with that one line and the commands that make it one
+(`git -C <repo> init`, then a first commit), and applies nothing.
+
 **Convention checks follow the harness.** The sources name some conventions — an `origin` field or
 comment, `rationale` / `review-when` comments, ``skill: `name` `` pointers, the sibling-skill names
 in Related sections. Each is a check only where the harness states it for itself (in its CLAUDE.md,
@@ -129,7 +134,7 @@ Agent tool of its own to split with. skill-stocktake's parent steps run as follo
   the script, which pairs a batch verdict and a probe verdict on one skill — a batch Keep against a
   probe Merge included — as a same-file collision for the author to settle
 
-Give each subagent the source id, both roots, `<run>`, the mode flags, the item schema below, and
+Give each subagent the source id, both roots, `<run>`, the mode flags, the report language (`en` or `ja`, Phase 3), the item schema below, and
 the path of its skill — `${CLAUDE_SKILL_DIR}/../<name>/SKILL.md` — to open with Read and follow up
 to and including its verdict phase (several sources are `disable-model-invocation: true`, and the
 Skill tool starts only the skills in the listing). Under `--dry-run` or in project mode the source
