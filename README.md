@@ -1,3 +1,5 @@
+[English](README.md) | [日本語](README.ja.md)
+
 # harness-stocktake
 
 Audit and clean up your whole Claude Code harness (skills, rules, agents, hooks, CLAUDE.md, ADRs and configs) in one report and one approval: a hygiene pass across files that changes only what you approve.
