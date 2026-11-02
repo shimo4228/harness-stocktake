@@ -10,7 +10,7 @@ Seven audits run in parallel, and their findings land in one report you can appr
 
 ## The first three minutes
 
-You need Claude Code 2.1.275 or later, git, Python 3.11 or later, and [uv](https://docs.astral.sh/uv/) (two audits run their standard-library scripts through `uv run`).
+You need Claude Code 2.1.292 or later, git, Python 3.11 or later, and [uv](https://docs.astral.sh/uv/) (two audits run their standard-library scripts through `uv run`).
 
 1. Install. This adds this repository as a plugin marketplace and installs the plugin:
 
@@ -51,7 +51,7 @@ Checks that need usage history (which skills you never use) read a usage log onl
 - **Reads** the files of the harness it audits: `~/.claude` (or the `--project` repo) — skills, rules, agents, `settings.json` hooks and the scripts they call, `CLAUDE.md`, `AGENTS.md`, ADRs, `README.md`, configs. Auditing `~/.claude`, it also reads usage logs under `~/.claude/metrics/` if present, and the MCP server names in `~/.claude.json` and `~/.claude/.mcp.json`.
 - **Writes** with `--dry-run`: only the run folder `.notes/stocktake/<date>/` inside the audited folder. Without `--dry-run`, after you approve: a git worktree and a branch `stocktake/<date>` with one commit per audit. The skill, rules, agent, hook and rules-distill audits keep their verdict history in the audited harness, `stocktake/<audit>.json` under `~/.claude` (or the repo's `.claude/`), committed on that branch; context-sync keeps none. repo-asset-stocktake writes `.repo-asset-stocktake.json` into the audited repo on the `stocktake/<date>` branch, in `--project` runs too. It never merges; you do.
 - **Runs** `git`, `python3` (standard library only), `uv run` for two audits' scripts and, for two checks, a child `claude -p` session: `/skill-doctor` for what each skill's listing costs, and a probe that checks in fresh sessions whether the model already does what a rule asks without the rule. Both children run with hooks off, no MCP servers, and no tools that write, fetch or reach the shell.
-- **Sends** nothing anywhere beyond your own Claude Code session. There is no telemetry and no network fetch. Two exceptions you opt into: with `--unattended`, the closing lines go to the notifier command you name; in the Claude desktop app with a Japanese-language report, the report is also published as a private Artifact page.
+- **Sends** no telemetry. Two things reach the network: skill-stocktake checks that the public http(s) URLs your skills name still resolve, with one GET per URL (10-second timeout, the body is not read, private and local addresses are skipped); and the first `uv run` of an audit's scripts downloads packages from PyPI (the dev tools pinned in each `uv.lock`, plus the `hatchling` build backend, which is not pinned). Two more you opt into: with `--unattended`, the closing lines go to the notifier command you name; in the Claude desktop app with a Japanese-language report, the report is also published as a private Artifact page.
 
 The audited files are treated as data: an instruction inside a `SKILL.md` or `CLAUDE.md` is quoted as evidence, never carried out. For a repository you do not trust, clone this repo and use `skills/harness-stocktake/scripts/isolated-dry-run.sh <repo> <out-dir>`, which runs the audit from an empty folder with no shell, no MCP servers and no settings files, so the repo's hooks cannot run.
 
@@ -70,7 +70,7 @@ The first finding appears in about 2 minutes, and the full report is ready in 5 
 <details>
 <summary>The seven audits, project mode, scheduling, measurement conditions</summary>
 
-harness-stocktake 0.1.0 (pre-release) is a Claude Code plugin of ten skills: `skills/harness-stocktake/SKILL.md` runs seven of the others as sources and owns the report and apply steps; each source's `SKILL.md` owns its own verdict rules. `skill-health` is the scanner skill-stocktake uses to check that the paths and URLs your skills name still resolve. `skill-writer` is the draft gate the apply step runs when an approved finding rewrites a skill; it is not a replacement for Anthropic's `skill-creator`. Requirements: Claude Code 2.1.275+, git, Python 3.11+, uv. License: MIT.
+harness-stocktake is a Claude Code plugin of ten skills: `skills/harness-stocktake/SKILL.md` runs seven of the others as sources and owns the report and apply steps; each source's `SKILL.md` owns its own verdict rules. `skill-health` is the scanner skill-stocktake uses to check that the paths and URLs your skills name still resolve. `skill-writer` is the draft gate the apply step runs when an approved finding rewrites a skill; it is not a replacement for Anthropic's `skill-creator`. Requirements: Claude Code 2.1.292+, git, Python 3.11+, uv. License: MIT.
 
 ### The seven audits
 
@@ -103,6 +103,8 @@ Applying changes needs the audited folder to be a git repository. If `~/.claude`
 ### Scheduling
 
 A monthly run is a scheduled `claude -p "/harness-stocktake:harness-stocktake --unattended"` from cron, a scheduled task or CI, with the commands allowed up front as in the `claude -p` example above. Name the command that should receive the closing lines (a notifier) in the prompt.
+
+On GitHub, [harness-stocktake-action](https://github.com/shimo4228/harness-stocktake-action) runs it for you: once a month and on pull requests that change `.claude/`, with the findings in one issue and the approved changes in one pull request.
 
 ### Measurement conditions
 
