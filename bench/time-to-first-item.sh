@@ -3,12 +3,14 @@
 # the sample harness, and record how long the first finding and the report take and what it costs.
 #
 # Usage: bench/time-to-first-item.sh [--source <marketplace source>] [--model <alias>]
-#                                    [--timeout <seconds>] [--out <dir>]
+#                                    [--timeout <seconds>] [--out <dir>] [--lang en|ja]
 #
 #   --source   what `claude plugin install --marketplace` gets (default: shimo4228/harness-stocktake;
 #              a local path tests an unpushed checkout)
 #   --model    model of the audit run (default: opus)
 #   --timeout  cap on the audit run in seconds (default: 1200)
+#   --lang     report language (default: en). ja adds a Japanese request to the command, since the
+#              skill writes in the language the operator writes in
 #   --out      new or empty directory for the results, outside any git work tree so no CLAUDE.md
 #              above it loads (default: a new mktemp directory)
 #
@@ -37,12 +39,14 @@ source_arg=shimo4228/harness-stocktake
 model=opus
 limit=1200
 out=""
+lang=en
 while [[ $# -gt 0 ]]; do
   case $1 in
     --source) [[ $# -ge 2 ]] || die "--source needs a value"; source_arg=$2; shift 2 ;;
     --model) [[ $# -ge 2 ]] || die "--model needs a value"; model=$2; shift 2 ;;
     --timeout) [[ $# -ge 2 && $2 =~ ^[0-9]+$ ]] || die "--timeout needs seconds"; limit=$2; shift 2 ;;
     --out) [[ $# -ge 2 ]] || die "--out needs a value"; out=$2; shift 2 ;;
+    --lang) [[ $# -ge 2 && $2 =~ ^(en|ja)$ ]] || die "--lang is en or ja"; lang=$2; shift 2 ;;
     *) die "unknown argument: $1" ;;
   esac
 done
@@ -92,10 +96,12 @@ start=$(date +%s)
 poller=$!
 trap 'kill "$poller" 2>/dev/null || true' EXIT
 
+request="/harness-stocktake:harness-stocktake --project $out/target --dry-run --out $out/run"
+[[ $lang == ja ]] && request="$request 日本語でレポートを書いてください。"
 rc=0
 (
   cd "$out/cwd" && "$timeout_bin" "$limit" claude -p \
-    "/harness-stocktake:harness-stocktake --project $out/target --dry-run --out $out/run" \
+    "$request" \
     --plugin-dir "$plugin_dir" \
     --model "$model" \
     --setting-sources local \

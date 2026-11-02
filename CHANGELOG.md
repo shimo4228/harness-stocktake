@@ -6,6 +6,8 @@
 - A Japanese Markdown report gives its override instructions in Japanese.
 - The Artifact report page shows its text in English or Japanese, following the run's report language. It is no longer Japanese-only, so an English session gets the page too.
 - The decision menu no longer lists `Keep` (or the recommended verdict) twice.
+- `examples/` has a sample report in English and Japanese from fresh runs on the sample harness, and a picture of the report page in each language; the README shows them.
+- `bench/time-to-first-item.sh --lang ja` runs the bench with a Japanese request.
 
 ## 0.1.0 — 2026-11-02
 

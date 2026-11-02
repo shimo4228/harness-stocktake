@@ -42,9 +42,13 @@ claude -p "/harness-stocktake:harness-stocktake --dry-run" \
 
 指摘は 1 件が 1 行です。判定（Retire、Merge、Improve、Update、Keep）、対象のファイル、ファイルを開かずに判断できる理由、そして正確な変更内容が並びます。行は影響の大きいもの（Retire）から小さいものへとグループにまとまり、Keep の行は最後に畳まれます。
 
-[`examples/sample-report.md`](examples/sample-report.md)（英語）は、[`examples/sample-harness/`](examples/sample-harness/)（英語）のサンプルハーネスから出た実際のレポートです。サンプルはよくあるずれを抱えた小さなプロジェクトで、存在しないスクリプトにつながった hook、同じレビューをする 2 つの skill、退役したモデルに固定された agent、無い `make` ターゲットを挙げる `CLAUDE.md` が入っています。
+[`examples/sample-report.ja.md`](examples/sample-report.ja.md)（日本語）と [`examples/sample-report.md`](examples/sample-report.md)（英語）は、[`examples/sample-harness/`](examples/sample-harness/)（英語）のサンプルハーネスから出た実際のレポートです。サンプルはよくあるずれを抱えた小さなプロジェクトで、存在しないスクリプトにつながった hook、同じレビューをする 2 つの skill、退役したモデルに固定された agent、無い `make` ターゲットを挙げる `CLAUDE.md` が入っています。
 
-`--dry-run` のレポートは読むためのものです。指摘を反映するには、`--dry-run` を外してもう一度実行します。レポートは同じですが、今度は指摘の `decision` セルを書き換えて（`skip`、`Keep`、別の判定、またはメモ）その指摘を上書きでき、そのあとチャットで「approved」と伝えます。
+Claude Code が Artifact を出せる環境（たとえば Claude のデスクトップアプリ）では、レポートはセッションの言語で非公開のページにも載ります。指摘ごとに判断を選び、**この内容で承認** を押します。
+
+![サンプルハーネスのレポートページ。グループごとの件数、承認ボタン、最初の Retire の指摘（根拠、変更内容、判断のメニュー）が並ぶ](examples/sample-report-page.ja.png)
+
+`--dry-run` のレポートは読むためのものです。指摘を反映するには、`--dry-run` を外してもう一度実行します。レポートは同じですが、今度は指摘を上書きして承認できます。Artifact のページでは、メニュー（`Keep`、見送り、別の判定）を変えるかメモを書き、**この内容で承認** を押します。Markdown のレポートでは、`decision` セルを書き換えて（`skip`、`Keep`、別の判定、またはメモ）、チャットで「approved」と伝えます。
 
 利用履歴が要るチェック（一度も使っていない skill はどれか）は、`~/.claude` を監査していて、かつ設定が `~/.claude/metrics/` に利用ログを残しているときだけ、そのログを読みます。ログが無いとき、また `--project` の実行では常に `n/a` になります。使っていない skill は `/doctor` が拾います。
 

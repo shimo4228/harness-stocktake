@@ -43,8 +43,13 @@ In the measured runs, the first finding appeared at a median of 138 seconds (14 
 Each finding is one row: a verdict (Retire, Merge, Improve, Update, Keep), the file it acts on, a reason you can decide on without opening the file, and the exact change. Rows are grouped from the most consequential (retirements) to the least, and the Keep rows fold away at the end.
 
 [`examples/sample-report.md`](examples/sample-report.md) is a real report from the sample harness in [`examples/sample-harness/`](examples/sample-harness/), a small project with ordinary drift: a hook wired to a missing script, two skills that do the same review, an agent pinned to a retired model, `CLAUDE.md` naming a `make` target that does not exist.
+[`examples/sample-report.ja.md`](examples/sample-report.ja.md) is a Japanese run on the same harness.
 
-A `--dry-run` report is for reading. To act on the findings, run again without `--dry-run`: the report is the same, and this time you can override a finding by editing its `decision` cell (`skip`, `Keep`, another verdict, or a note) and then say "approved" in the chat.
+When Claude Code can publish Artifacts (in the Claude desktop app, for example), the report also opens as a private page in the language of your session. You pick a decision per finding there and press **Approve as shown**:
+
+![The report page for the sample harness: counts per group, the approve button, and the first Retire finding with its evidence, change and decision menu](examples/sample-report-page.en.png)
+
+A `--dry-run` report is for reading. To act on the findings, run again without `--dry-run`: the report is the same, and this time you can override a finding and approve. On the Artifact page, change its menu (`Keep`, skip, another verdict) or add a note, then press **Approve as shown**. With the Markdown report, edit its `decision` cell (`skip`, `Keep`, another verdict, or a note) and then say "approved" in the chat.
 
 Checks that need usage history (which skills you never use) read a usage log only when auditing `~/.claude` and your setup keeps one under `~/.claude/metrics/`. Without it, and always in `--project` runs, they are marked `n/a`; `/doctor` covers unused skills.
 
