@@ -3,6 +3,7 @@ message: "harness-stocktake implements the Curate phase of the Agent Knowledge C
 type: software
 title: "harness-stocktake"
 version: "0.1.0"
+date-released: "2026-11-02"
 abstract: "A Claude Code plugin that audits and cleans up a whole Claude Code harness — skills, rules, agents, hooks, CLAUDE.md, ADRs and configs — in one report and one approval, then applies the approved changes on a branch."
 authors:
   - family-names: Shimomoto

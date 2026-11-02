@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 — unreleased
+## 0.1.0 — 2026-11-02
 
 - First release: harness-stocktake and its seven source audits (skill-stocktake, rules-stocktake,
   agent-stocktake, hook-stocktake, rules-distill, context-sync, repo-asset-stocktake) as one plugin.
