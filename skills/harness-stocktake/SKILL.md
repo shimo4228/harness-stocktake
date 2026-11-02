@@ -246,19 +246,19 @@ Without Bash (the isolated run), Phase 3 ends at `crosscheck.json`: the caller r
 
 **Pick the report form by what the session can do**, the same in `~/.claude` and in project mode:
 
-**Markdown report** (`--dry-run`, the isolated run, any session without the Artifact tool, or
-`--lang en` — the page's own text is Japanese): `report.md` is the report.
+**Markdown report** (`--dry-run`, the isolated run, or any session without the Artifact tool):
+`report.md` is the report.
 Outside `--dry-run`, write `<repo>/.notes/stocktake/latest.json` = `{report: <path of
 report.md>, date, base}`. Under `--dry-run` the run ends here with the path of `report.md` and the counts per
 group.
 
-**Artifact report** (the Artifact tool is available and `--lang ja`; `<repo>` is `~/.claude` or the
-`--project` path):
+**Artifact report** (the Artifact tool is available; `<repo>` is `~/.claude` or the `--project` path;
+the page shows its own text in `meta/run.lang`):
 
 1. Publish `${CLAUDE_SKILL_DIR}/templates/report.html` as a new Artifact (icon `checklist`) with
    `capabilities: {db: {rules: [{path: "", read: "interact", write: "owner"}]}}`.
 2. Write the store with one `ArtifactData` `batch`: every item of `<run>/items-all.json` at `items/<id>`, and `meta/run` =
-   `{title: "Harness 棚卸し <date>", created_at: <date -u +%Y-%m-%dT%H:%M:%SZ>, scope: <sources>,
+   `{title: <the first line of report.md without "# ">, lang: <the --lang value>, created_at: <date -u +%Y-%m-%dT%H:%M:%SZ>, scope: <sources>,
    phase: "proposed", base: <git -C <repo> rev-parse HEAD>}`. The session writes only `items/*` and `meta/run`; `decisions/*` and
    `meta/approval` belong to the author's page.
 3. Read back one `ArtifactData` `list` of `items` and check the count.

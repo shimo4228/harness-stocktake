@@ -4,6 +4,8 @@
 
 - `--project <repo>` publishes the same report form as a run on `~/.claude`: an Artifact page when the session has the Artifact tool, Markdown otherwise. It no longer always writes Markdown.
 - A Japanese Markdown report gives its override instructions in Japanese.
+- The Artifact report page shows its text in English or Japanese, following the run's report language. It is no longer Japanese-only, so an English session gets the page too.
+- The decision menu no longer lists `Keep` (or the recommended verdict) twice.
 
 ## 0.1.0 — 2026-11-02
 
