@@ -21,7 +21,7 @@ keywords:
 references:
   - type: software
     title: "Agent Knowledge Cycle (AKC)"
-    doi: 10.5281/zenodo.19200727
+    doi: 10.5281/zenodo.19200726
     authors:
       - family-names: Shimomoto
         given-names: Tatsuya

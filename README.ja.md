@@ -120,4 +120,4 @@ GitHub では [harness-stocktake-action](https://github.com/shimo4228/harness-st
 
 MIT です。issue や質問は [github.com/shimo4228/harness-stocktake/issues](https://github.com/shimo4228/harness-stocktake/issues) へどうぞ。
 
-harness-stocktake は、Agent Knowledge Cycle（AKC）の Curate フェーズを実装したものです（DOI [10.5281/zenodo.19200727](https://doi.org/10.5281/zenodo.19200727)（英語））。
+harness-stocktake は、Agent Knowledge Cycle（AKC）の Curate フェーズを実装したものです（DOI [10.5281/zenodo.19200726](https://doi.org/10.5281/zenodo.19200726)（英語））。
