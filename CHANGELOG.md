@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- `--project <repo>` publishes the same report form as a run on `~/.claude`: an Artifact page when the session has the Artifact tool, Markdown otherwise. It no longer always writes Markdown.
+- A Japanese Markdown report gives its override instructions in Japanese.
+
 ## 0.1.0 — 2026-11-02
 
 - First release: harness-stocktake and its seven source audits (skill-stocktake, rules-stocktake,
