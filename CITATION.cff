@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "harness-stocktake implements the Curate phase of the Agent Knowledge Cycle (AKC). If you use or reference it, please cite it as below, and cite AKC for the cycle it implements."
 type: software
 title: "harness-stocktake"
-version: "0.1.0"
+version: "0.2.0"
 date-released: "2026-11-02"
 abstract: "A Claude Code plugin that audits and cleans up a whole Claude Code harness — skills, rules, agents, hooks, CLAUDE.md, ADRs and configs — in one report and one approval, then applies the approved changes on a branch."
 authors:
